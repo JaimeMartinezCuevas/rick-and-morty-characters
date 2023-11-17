@@ -5,40 +5,43 @@ const nextPage = document.getElementById('next-page')
 const endPointRickAndMorty = 'https://rickandmortyapi.com/api/character/?page='
 let paginaActual = 1
 
-function getRickAndMortyCharacters(url) {
+function getRickAndMortyCharacters() {
     characterList.innerHTML = ''
-    fetch(`${url} ${paginaActual}`).then(res => {
-        if (!res.ok) {
-        throw new Error('Ha habido un error');
-    }   else {
-        return res.json()
-    }
-}).then(datos => {
+
+        fetch(`${endPointRickAndMorty} ${paginaActual}`).then(res => {
+            if (!res.ok) {
+                throw new Error('Ha habido un error');
+        }   else {
+                return res.json()
+        }
+
+    })
+
+    .then(datos => {
 
     datos.results.forEach(character => {
         let listItem =`
         <li>
             <img src="${character.image}" alt="${character.name}"/>
-            <p><span>Nombre:</span>${character.name}</p>
-            <p><span>Especie:</span>${character.species}</p>
+            <p><span class="color1">Nombre: </span>${character.name}</p>
+            <p><span class="color2">Especie: </span>${character.species}</p>
         </li>
         `
         characterList.innerHTML += listItem
+        });
     });
-})
-
 }
 
 previousPage.addEventListener('click', function() {
-    paginaActual --
+    paginaActual --;
 
-    if(paginaActual == 0) {
+    if (paginaActual < 1) {
     paginaActual = 1
     }
     getRickAndMortyCharacters(endPointRickAndMorty)
 })
 
-previousPage.addEventListener('click', function() {
+nextPage.addEventListener('click', function() {
     paginaActual ++;
     getRickAndMortyCharacters(endPointRickAndMorty)
 })
